@@ -1,0 +1,100 @@
+/* Estilos gerais da página de listagem de eventos */
+.event-listing-page {
+    background-color: #141414; /* Fundo escuro principal, tipo Netflix */
+    min-height: 100vh; /* Garante que o fundo ocupe toda a altura da tela */
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+.page-title-events {
+    color: #e5e5e5; /* Cor clara para o título principal */
+    font-weight: bold;
+    margin-bottom: 30px !important; /* Sobrescreve o mb-4 para mais espaço */
+}
+
+/* Estilos para a grade de cards */
+.event-grid {
+    /* O Bootstrap já cuida do layout da grade com row e col, 
+       mas podemos adicionar estilos específicos se necessário. */
+}
+
+/* Estilos para o link que envolve o card */
+.event-card-link {
+    text-decoration: none;
+    color: inherit; /* Remove sublinhado e herda cor do texto */
+    display: block; /* Faz o link ocupar todo o espaço do card */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    border-radius: 8px; /* Para o efeito de sombra e hover */
+}
+
+.event-card-link:hover {
+    transform: scale(1.05); /* Efeito de zoom no card inteiro */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7); /* Sombra mais pronunciada */
+}
+
+/* Estilos para o card (baseado no .card do Bootstrap, mas com customizações) */
+.event-card-netflix {
+    background-color: #1c1c1c; /* Cor de fundo do card, um pouco mais clara que o body */
+    border: none; /* Remove a borda padrão do Bootstrap card */
+    border-radius: 8px;
+    overflow: hidden; /* Importante para o card-img-overlay e cantos arredondados da imagem */
+    position: relative; /* Necessário para o posicionamento absoluto do overlay */
+    color: #fff; /* Cor padrão do texto dentro do card */
+    height: 100%; /* Garante que todos os cards na mesma linha tenham a mesma altura (Bootstrap .h-100) */
+}
+
+/* Estilos para a imagem do card */
+.event-card-img {
+    width: 100%;
+    height: 200px; /* Altura fixa para a imagem, ajuste conforme necessário */
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+    display: block;
+    border-top-left-radius: 8px; /* Arredonda os cantos superiores se o card tiver borda */
+    border-top-right-radius: 8px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.event-card-link:hover .event-card-img {
+    opacity: 0.8; /* Levemente escurece a imagem no hover para destacar o overlay */
+}
+
+/* Estilos para o overlay sobre a imagem */
+.event-card-overlay-netflix {
+    /* Bootstrap .card-img-overlay já define position: absolute e padding.
+       d-flex flex-column justify-content-end ajuda a posicionar o conteúdo no final. */
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 100%);
+    padding: 1rem; /* Ajusta o padding padrão do card-img-overlay se necessário */
+    border-bottom-left-radius: 8px; /* Garante que o overlay acompanhe o card */
+    border-bottom-right-radius: 8px;
+}
+
+/* Estilos para o título do evento no overlay */
+.event-card-title-netflix {
+    color: #fff;
+    font-size: 1.1rem; /* Ajuste o tamanho da fonte conforme necessário */
+    font-weight: bold;
+    margin-bottom: 0; /* Remove margem inferior padrão do h5 */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* Sombra leve no texto para legibilidade */
+}
+
+/* Estilos para a data (se decidir adicioná-la de volta ao overlay) */
+.event-card-date-netflix {
+    font-size: 0.8rem;
+    color: #b3b3b3; /* Cor mais suave para a data */
+    margin-top: 5px;
+}
+
+/* Estilos para a mensagem de "sem eventos" */
+.event-listing-page .text-center.py-5 h1.display-4 {
+    color: #6c757d !important; /* Cor do texto 'text-muted' do Bootstrap */
+}
+.event-listing-page .text-center.py-5 .lead {
+    color: #adb5bd;
+}
+.event-listing-page .text-center.py-5 a {
+    color: var(--theme-blue, #007bff); /* Usa a variável de tema se definida, senão um azul padrão */
+    text-decoration: underline;
+}
+.event-listing-page .text-center.py-5 a:hover {
+    color: var(--theme-red, #dc3545); /* Usa a variável de tema se definida, senão um vermelho padrão */
+}

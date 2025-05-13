@@ -1,0 +1,205 @@
+html { /* Adicionado para garantir que o html também tenha 100% de altura */
+    height: 100%;
+}
+
+body {
+    font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    line-height: 1.6;
+    background-color: #4a4a4a; 
+    color: #f8f9fa; 
+    display: flex; /* Adicionado para sticky footer */
+    flex-direction: column; /* Adicionado para sticky footer */
+    min-height: 100%; /* Garante que o body ocupe pelo menos a altura da viewport */
+}
+
+#page-content { /* Novo estilo para o wrapper do conteúdo */
+    flex: 1 0 auto; /* Faz o conteúdo principal crescer e ocupar espaço */
+    padding-top: 90px; /* Aumentado o padding-top para compensar a navbar fixa e dar mais respiro */
+    padding-bottom: 30px; /* Espaço na parte inferior do conteúdo principal */
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: 'Montserrat', sans-serif; /* Aplicar Montserrat a todos os cabeçalhos */
+    color: var(--mackenzie-blue); /* Mantém a cor azul para cabeçalhos - pode precisar de ajuste se o fundo for muito escuro */
+    /* Se o fundo do body for muito escuro, talvez os títulos azuis precisem ser mais claros: */
+    /* color: #79a6d2; */ /* Exemplo de azul mais claro */
+}
+
+.navbar-brand img {
+    max-height: 45px; /* Aumentando mais o logo, ajuste conforme necessário */
+    width: auto; /* Para manter a proporção */
+    margin-top: -5px; /* Ajuste fino vertical, se necessário */
+}
+
+.page-title-custom {
+    font-weight: 500; /* Alterado de 300 para 500 para mais destaque */
+    text-align: center; 
+    color: var(--mackenzie-red); 
+    margin-bottom: 30px; 
+    font-size: 2.5rem; /* Aumenta um pouco o título da página */
+}
+
+/* Estilos para o container principal */
+.container {
+    background-color: white; /* Mantém o fundo branco para o conteúdo principal, criando contraste */
+    border-radius: 8px; /* Já estava no base.html, mas pode ser reforçado aqui */
+    box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Sombra um pouco mais pronunciada para o container */
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px; /* Adicionado padding interno para o conteúdo dentro do container */
+    padding-bottom: 20px; /* Adicionado padding interno para o conteúdo dentro do container */
+}
+
+/* Melhorando a aparência dos cards de evento */
+.card {
+    border: 1px solid #e0e0e0; 
+    transition: box-shadow .3s ease-in-out, transform .3s ease-in-out; 
+    border-radius: 0.5rem; 
+    margin-bottom: 1.5rem; /* Adiciona espaço abaixo de cada card */
+}
+
+.card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Sombra mais pronunciada no hover */
+    transform: translateY(-5px); /* Efeito sutil de elevação no hover */
+}
+
+.card-title {
+    color: var(--mackenzie-red); 
+    font-weight: 700; /* Título do card mais forte com Montserrat */
+    font-size: 1.25rem; /* Tamanho do título do card */
+}
+
+.card-body {
+    padding: 1.5rem; /* Mais padding interno nos cards */
+}
+
+.card-footer {
+    background-color: #f8f9fa; 
+    border-top: 1px solid #e0e0e0;
+    font-size: 0.9em; /* Texto do rodapé do card um pouco menor */
+}
+
+/* Estilos para a Navbar Mackenzie */
+.navbar-mackenzie .nav-link.active {
+    color: white; /* Garante que o link ativo permaneça branco */
+    /* font-weight: 700; */ /* Removido para consistência com outros links da navbar */
+    /* Outra opção para destaque:
+    color: var(--mackenzie-red);
+    border-bottom: 2px solid var(--mackenzie-red);
+    */
+}
+
+/* Estilo para o botão de dropdown na navbar */
+.navbar-nav .dropdown-menu {
+    background-color: var(--mackenzie-blue); /* Fundo do dropdown azul */
+}
+.navbar-nav .dropdown-item {
+    color: white; /* Texto do item do dropdown branco */
+}
+.navbar-nav .dropdown-item:hover {
+    background-color: var(--mackenzie-red); /* Fundo do item no hover vermelho */
+    color: white;
+}
+.navbar-nav .nav-item.dropdown .nav-link {
+    cursor: pointer; /* Para indicar que é clicável */
+}
+
+/* Estilizando o texto de ajuda dos formulários */
+.form-text {
+    font-size: 0.875em; /* Tamanho da fonte padrão para ajuda */
+    margin-top: 0.25rem; /* Pequeno espaço acima do texto de ajuda */
+}
+
+/* Estilizando a lista de ajuda para senhas (e outras listas em form-text) */
+.form-text ul {
+    padding-left: 1.2rem; /* Adiciona um pouco de indentação à lista */
+    margin-bottom: 0; /* Remove a margem inferior padrão do ul */
+    list-style-position: outside; /* Garante que os marcadores fiquem fora do fluxo de texto se houver quebra de linha */
+}
+
+.form-text ul li {
+    margin-bottom: 0.25rem; /* Espaçamento entre os itens da lista */
+    line-height: 1.4; /* Melhora a legibilidade de itens de lista mais longos */
+}
+
+/* Estilos explícitos para inputs de formulário para garantir alinhamento */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form select {
+    display: block; /* Garante que ocupem a linha inteira */
+    width: 100%;   /* Garante que ocupem a largura total */
+    /* REMOVIDA A BORDA DE DEPURAÇÃO */
+}
+
+/* Ajustes gerais para links e botões */
+a {
+    color: var(--mackenzie-red);
+    text-decoration: none; /* Remove sublinhado padrão de links */
+    font-weight: 500; /* Links um pouco mais destacados */
+}
+
+a:hover {
+    color: #a7191f; /* Vermelho mais escuro no hover para links */
+    text-decoration: underline; /* Adiciona sublinhado no hover */
+}
+
+.btn {
+    border-radius: 0.3rem; 
+    padding: 0.6rem 1.2rem; /* Aumenta um pouco o padding dos botões */
+    font-weight: 700; /* Botões com texto mais forte */
+    text-transform: uppercase; /* Botões em maiúsculas para destaque */
+    letter-spacing: 0.5px; /* Pequeno espaçamento entre letras nos botões */
+    font-family: 'Montserrat', sans-serif; /* Fonte Montserrat para botões */
+}
+
+/* Botão primário (vermelho) já definido no base.html, mas podemos reforçar/ajustar */
+.btn-primary {
+    background-color: var(--mackenzie-red);
+    border-color: var(--mackenzie-red);
+    color: white;
+}
+.btn-primary:hover {
+    background-color: #a7191f;
+    border-color: #a7191f;
+    color: white;
+}
+
+/* Botão secundário (azul) já definido no base.html, mas podemos reforçar/ajustar */
+.btn-secondary {
+    background-color: var(--mackenzie-blue);
+    border-color: var(--mackenzie-blue);
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #002244;
+    border-color: #002244;
+    color: white;
+}
+
+/* Rodapé */
+footer {
+    flex-shrink: 0; /* Adicionado para sticky footer */
+    margin-top: auto; /* Empurra o footer para baixo se o conteúdo for curto */
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #343a40; 
+    color: #f8f9fa; 
+    width: 100%; /* Garante que o footer ocupe toda a largura */
+}
+
+/* Estilo para o parágrafo no rodapé, garantindo a cor clara */
+footer p.text-muted { 
+    color: #dee2e6 !important; /* Cor clara com !important para sobrescrever Bootstrap */
+    margin-bottom: 0; 
+}
+
+/* Adicione aqui outros estilos baseados nas suas imagens de referência */
+/* Exemplo:
+.hero-section {
+    background-image: url("{% static 'images/sua-imagem-hero.jpg' %}");
+    background-size: cover; Exemplo:
+    padding: 100px 0;
+    text-align: center; url("{% static 'images/sua-imagem-hero.jpg' %}");
+    color: white;
+}   padding: 100px 0;

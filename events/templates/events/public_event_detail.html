@@ -1,0 +1,75 @@
+<!-- filepath: /home/marcelo/interligaMack/events/templates/events/public_event_detail.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title|default:"Detalhes do Evento" }} - Interliga Mack{% endblock %}
+
+{% block extra_head %}
+    {# Você pode adicionar CSS específico para esta página aqui, se necessário #}
+    <link rel="stylesheet" href="{% static 'css/frontend_event_detail.css' %}"> {# Exemplo #}
+    <style>
+        .event-detail-container {
+            padding: 20px;
+        }
+        .event-detail-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .event-detail-title {
+            color: var(--mackenzie-red, #d42027); /* Cor do título, usando variável do base.html */
+        }
+        .event-detail-meta {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .event-detail-description {
+            line-height: 1.6;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container event-detail-container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Eventos</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ event.name }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="event-detail-title mb-3">{{ event.name }}</h1>
+
+    {% if event.imagem_destaque %}
+        <img src="{{ event.imagem_destaque.url }}" alt="{{ event.name }}" class="img-fluid event-detail-image">
+    {% elif event.image %}
+         <img src="{{ event.image.url }}" alt="{{ event.name }}" class="img-fluid event-detail-image">
+    {% endif %}
+
+    <div class="event-detail-meta">
+        <p><strong>Data:</strong> {{ event.date|date:"d/m/Y H:i" }}</p>
+        <p><strong>Local:</strong> {{ event.location }}</p>
+        {% if event.organizer_name %}
+            <p><strong>Organizador:</strong> {{ event.organizer_name }}</p>
+        {% endif %}
+    </div>
+
+    <div class="event-detail-description">
+        <h4>Descrição:</h4>
+        {% if event.long_description %}
+            {{ event.long_description|linebreaks }}
+        {% elif event.short_description %}
+            {{ event.short_description|linebreaks }}
+        {% else %}
+            <p>Mais informações sobre este evento serão disponibilizadas em breve.</p>
+        {% endif %}
+    </div>
+
+    {# Adicione mais detalhes do evento aqui conforme necessário #}
+
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="btn btn-secondary">Voltar para a lista de eventos</a>
+    </div>
+</div>
+{% endblock %}

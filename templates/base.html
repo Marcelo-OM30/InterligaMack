@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Interliga Mack{% endblock %}</title>
+    <link rel="icon" href="{% static 'images/logo-vermelho-mack.png' %}" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Seu CSS customizado pode vir aqui -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    {% block extra_head %}
+    {# Este bloco pode ser usado por templates filhos para adicionar CSS ou meta tags específicas #}
+    {% endblock %}
+    <style>
+        /* Cores base Mackenzie (Exemplo) */
+        :root {
+            --mackenzie-blue: #003366; /* Azul escuro Mackenzie */
+            --mackenzie-red: #d42027;  /* Vermelho Mackenzie */
+            --mackenzie-light-gray: #f0f0f0;
+        }
+
+        /* Estilos para Sticky Footer */
+        html, body {
+            height: 100%;
+        }
+        body { 
+            display: flex;
+            flex-direction: column;
+        }
+        #page-content {
+            flex: 1 0 auto; /* Faz o conteúdo principal crescer e ocupar espaço */
+            padding-top: 70px; /* Ajuste para navbar fixa */
+        }
+        footer {
+            flex-shrink: 0; /* Impede que o footer encolha */
+        }
+        /* Fim dos Estilos para Sticky Footer */
+
+        .navbar-mackenzie {
+            background-color: var(--mackenzie-blue); /* Navbar azul */
+        }
+        .navbar-mackenzie .navbar-brand,
+        .navbar-mackenzie .nav-link {
+            color: white;
+        }
+        .navbar-mackenzie .nav-link:hover {
+            color: var(--mackenzie-red); /* Vermelho no hover */
+        }
+        .navbar-brand img {
+            max-height: 35px; /* Ajuste conforme o tamanho do seu logo */
+            width: auto; /* Para manter a proporção */
+            margin-right: 10px;
+            margin-top: -5px; /* Ajuste fino vertical, se necessário */
+        }
+        .container { 
+            margin-top: 20px; 
+            background-color: white; /* Conteúdo principal com fundo branco */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-section-title {
+            margin-top: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+            color: var(--mackenzie-red);
+        }
+        .btn-primary {
+            background-color: var(--mackenzie-red);
+            border-color: var(--mackenzie-red);
+        }
+        .btn-primary:hover {
+            background-color: #a7191f; /* Vermelho mais escuro no hover */
+            border-color: #a7191f;
+        }
+        .btn-secondary {
+            background-color: var(--mackenzie-blue);
+            border-color: var(--mackenzie-blue);
+        }
+        .btn-secondary:hover {
+            background-color: #002244; /* Azul mais escuro no hover */
+            border-color: #002244;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--mackenzie-blue);
+        }
+        .page-title-custom {
+             color: var(--mackenzie-red);
+             margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-mackenzie fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/logo-vermelho-mack.png' %}" alt="Interliga Mack Logo">
+                Interliga Mack
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'public_event_list' or request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Eventos</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        {# Link para Solicitar Evento (para usuários 'solicitante') #}
+                        {% if user.user_type == 'solicitante' %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'create_event_request' %}active{% endif %}" href="{% url 'events:create_event_request' %}">Solicitar Evento</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'list_my_event_requests' %}active{% endif %}" href="{% url 'events:list_my_event_requests' %}">Minhas Solicitações</a>
+                            </li>
+                        {% endif %}
+
+                        {# Removido o link "Adicionar Evento" customizado, pois o Admin já cobre isso #}
+                        
+                        {# Link para Adicionar Evento diretamente (ex: para admin ou cerimonial) #}
+                        {# Ajuste a condição user.is_superuser ou adicione user.user_type == 'cerimonial' se aplicável #}
+                        {% if user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'add_event' and request.resolver_match.app_name == 'events' %}active{% endif %}" href="{% url 'events:add_event' %}">Adicionar Evento</a>
+                            </li>
+                        {% endif %}
+                        
+                        {% if user.is_superuser %} 
+                            <li class="nav-item">
+                                <a class="nav-link {% if 'admin' in request.resolver_match.namespace %}active{% endif %}" href="{% url 'admin:index' %}">Admin</a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Olá, {{ user.first_name|default:user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown"> 
+                                <li>
+                                    <form method="post" action="{% url 'users:logout' %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item">Sair</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'user_register' %}active{% endif %}" href="{% url 'users:user_register' %}">Registrar-se</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'users:login' %}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="page-content">
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <h1 class="page-title-custom">{% block page_title %}{{ page_title|default:"Interliga Mack" }}{% endblock %}</h1>
+            <hr>
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <footer class="py-3 my-4 text-center">
+        <p class="text-muted">&copy; {% now "Y" %} Mackenzie. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

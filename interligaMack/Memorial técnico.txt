@@ -1,0 +1,29 @@
+Memorial técnico (projeto do Produto Técnico-Tecnológico)
+
+Com o objetivo de se aferir a reputação do Mackenzie, por meio dos eventos, no recorte do programa Para Sempre Mackenzista e sua funcionalidade, será criado uma aplicação web que terá como nome Interliga Mack. Para ele ser desenvolvido, a ideia é utilizar o conceito de interculturalidade e se buscar algum aluno de outra unidade acadêmica, como a Faculdade de Computação e Informática, que possa criar a plataforma a partir do briefing de execução. Ele surge como uma alternativa para tentar se conectar os setores envolvidos na produção de um evento e principalmente ter o retorno se a marca Mackenzie está trazendo impactos positivos e como mensurá-la.
+A maior dificuldade pode ser criar dois sistemas com públicos diferentes e unificá-los, pois, haverá o espaço para os colaboradores internos do Mackenzie, que solicitarão cerimonial e farão a inserção no sistema, e os alunos, alunas e público em geral que participará dos eventos. Essas duas comunidades integrarão a mesma aplicação web. 
+Ela será dividida entre os solicitantes dos eventos (público interno) e os usuários (alunos, palestrantes, fornecedores) da seguinte forma:
+1)Solicitantes dos eventos: 
+Centralização dos dados – irá inserir todas as informações sobre o evento quando pedir cerimonial. Compartilhará a programação, data, local e horário, currículos dos palestrantes, convite, devocional. Ao se abrir essa requisição, o sistema terá uma parceria com os outros setores que compõem o Mackenzie na realização de um evento, como sonorização, fotografia, serviço de apoio e limpeza, gravação e transmissão, cobertura jornalística, manutenção, auditórios, entre outros.
+
+Gestão da informação – propiciar ferramentas para gerenciar inscrições, quando necessário, gratuitas ou pagas, painel dos fornecedores, contendo todas as empresas externas que trabalham nos eventos, separadas por áreas, como decoração, buffet, intérprete de libras e idiomas, etc, com seus respectivos orçamentos que ficarão no histórico de cada evento. Agendamento de atividades para o Cerimonial e os outros setores assinalarem o que cada área já fez, ou está trabalhando no momento; controle de recursos, haverá uma planilha de excel assinalando o quanto já foi dispendido de dinheiro. 
+
+Maior visibilidade e alcance – com o Interliga Mack, os públicos internos e externos poderão ter maior clareza dos eventos e de todos os processos, desde sua concepção, até sua finalização, resultando assim na divulgação da marca Mackenzie e consequentemente em sua valorização da reputação. 
+
+Análise de dados – em parceria com o setor de BI, será possível coletar dados dos participantes dos eventos, tudo em conformidade com a Lei Geral de Proteção de Dados, com aprovação do DPO, para identificar quais são os interesses prioritários dos alunos, quais foram os melhores eventos ranqueados, quais palestrantes tiveram mais engajamento.
+
+
+2)Usuários – alunos(as), público no geral
+
+Experiência do usuário – haverá um espaço com informações sobre os palestrantes que se apresentarem no evento, contendo suas redes sociais e a forma de se entrar em contato com eles. Nesse local, também será possível interagir e publicar, em tempo real, conteúdos relacionados ao evento, promovendo o networking e a troca de experiências. 
+
+Centralização dos dados – todas as informações relacionadas ao evento estarão disponíveis, como programação completa, data, hora e local, se haverá horas complementares ou presença e, caso haja, será possível no sistema mesmo eles logarem, durante o evento e se registrarem.
+
+Questionários – os usuários responderão a questionários de satisfação, curtos e com incentivos, para o Mackenzie identificar suas preferências e o que poderia melhor na experiência do consumidor.
+
+Segue, abaixo, protótipo da aplicação web, para usuários (alunos e público em geral), de como seria o feed com os eventos disponíveis listados. 
+
+
+
+
+A aplicação do Interliga Mack seria validada no início do ano de 2026, em fase inicial, após ser enviada a toda a comunidade mackenzista e-mail MKT divulgando a nova plataforma e um pequeno manual de utilização. Tendo em vista que janeiro e fevereiro são meses de poucos eventos na instituição, seria um período propício para se implantar uma nova ferramenta, pensada para ser adaptada e utilizada em qualquer instituição de ensino do país. 

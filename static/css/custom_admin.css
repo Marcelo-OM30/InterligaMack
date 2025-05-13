@@ -1,0 +1,289 @@
+/* Custom CSS para o Bloco "Ações Recentes" no Django Admin com Jazzmin */
+
+/* 
+   ATENÇÃO: Os seletores abaixo são SUGESTÕES. 
+   Use o "Inspecionar Elemento" (F12) do seu navegador para encontrar 
+   as classes ou IDs REAIS dos elementos do bloco "Ações Recentes" e seus itens.
+*/
+
+/* --- Theme Color Variables (Mackenzie Inspired) --- */
+/* For a full application-wide theme, consider Jazzmin's theme settings 
+   or overriding its core CSS variables if available. 
+   These variables are for use within this custom_admin.css file. */
+:root {
+    --theme-blue: #004A8D;   /* Mackenzie Primary Blue */
+    --theme-red: #DA291C;     /* Mackenzie Accent Red */
+    --theme-white: #FFFFFF;
+    --theme-background-light: var(--theme-white); /* Main background */
+    --theme-text-dark: #333333;      /* Dark grey for text */
+    --theme-text-light: var(--theme-white);     /* White text for dark backgrounds */
+    --theme-border-light: #dee2e6; /* Light grey for borders, similar to Bootstrap */
+    /* Commenting out gradient variables as they are no longer used for .content-wrapper */
+    /*
+    --theme-gradient-start: rgb(124, 85, 90); 
+    --theme-gradient-mid: var(--theme-blue);   
+    --theme-gradient-end: var(--theme-white);
+    */
+}
+
+/* Seletor para o contêiner geral do módulo de ações recentes (se necessário) */
+.module#recent-actions-module {
+    /* border: 1px solid red; */ /* Descomente para ver se este seletor está funcionando */
+}
+
+/* Commenting out old selectors as they don't match the provided HTML structure */
+/*
+.module#recent-actions-module .logentry,
+.module#recent-actions-module .card,
+.jazzmin-recent-action-item
+{
+    padding: 10px 15px !important;
+    margin-bottom: 10px !important;
+    min-height: 60px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    overflow-wrap: break-word !important;
+    word-wrap: break-word !important;
+    box-sizing: border-box !important;
+}
+
+.module#recent-actions-module .logentry p,
+.module#recent-actions-module .logentry .message,
+.module#recent-actions-module .card-body,
+.module#recent-actions-module .card-text,
+.jazzmin-recent-action-text
+{
+    display: block !important;
+    width: 100% !important;
+    line-height: 1.5 !important;
+    margin-bottom: 5px !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    font-size: 0.9rem !important;
+    word-break: break-word !important;
+    box-sizing: border-box !important;
+}
+
+.module#recent-actions-module .logentry a {
+    word-break: break-all !important;
+    display: inline-block !important;
+    max-width: 100% !important;
+}
+
+.module#recent-actions-module .text-truncate {
+    overflow: visible !important;
+    white-space: normal !important;
+    text-overflow: clip !important;
+}
+*/
+
+/* NEW STYLES FOR JAZZMIN TIMELINE STRUCTURE */
+
+/* Container for each timeline entry */
+.module#recent-actions-module .timeline-item {
+    /* border: 1px solid blue; */ /* Test selector */
+    padding: 8px 12px; /* Adjust padding as needed */
+    margin-bottom: 10px;
+    background-color: var(--theme-white); /* Use white background */
+    border-left: 3px solid var(--theme-blue); /* Use theme blue for accent border */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align content to the top */
+    min-height: 50px; /* Ensure a minimum height */
+    box-sizing: border-box;
+}
+
+/* Header of the timeline item (contains the main link) */
+.module#recent-actions-module .timeline-item .timeline-header {
+    /* border: 1px solid green; */ /* Test selector */
+    /* margin-bottom: 5px; */ /* Removed as timeline-body will be hidden */
+    line-height: 1.4;
+    font-size: 0.95rem; /* Slightly larger font for the main action link */
+    /* color: var(--theme-text-dark); */ /* Default text color for header if not a link */
+}
+
+.module#recent-actions-module .timeline-item .timeline-header a {
+    /* border: 1px solid orange; */ /* Test selector */
+    white-space: normal !important; /* Allow text to wrap */
+    word-break: break-word !important; /* Break long words/links */
+    overflow-wrap: break-word !important;
+    display: inline; /* Or inline-block if more control is needed */
+    color: var(--theme-blue); /* Make link text Mackenzie blue */
+}
+
+/* Body of the timeline item (contains details like "Alterado...") */
+.module#recent-actions-module .timeline-item .timeline-body {
+    display: none !important; /* Hide the entire timeline body */
+    /* Other properties become irrelevant if display is none */
+    /*
+    font-size: 0.85rem;
+    line-height: 1.5;
+    white-space: normal !important; 
+    word-break: break-word !important; 
+    overflow-wrap: break-word !important;
+    width: 100%; 
+    box-sizing: border-box;
+    */
+}
+
+/* Specifically for list items within the timeline body - now redundant */
+/*
+.module#recent-actions-module .timeline-item .timeline-body ul {
+    display: none !important; 
+    margin-top: 5px;
+    margin-bottom: 0; 
+}
+
+.module#recent-actions-module .timeline-item .timeline-body ul li {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.4;
+}
+*/
+
+
+/* Tente remover ou ajustar a altura máxima se estiver causando problemas */
+/* .card-body { max-height: none !important; } */
+
+/* Se os itens estiverem em uma lista <ul> */
+/* This might not be needed if the timeline structure is different */
+/*
+.module#recent-actions-module ul.actionlist {
+    padding-left: 0; 
+    list-style-type: none;
+}
+*/
+
+/* --- Styling for other text elements --- */
+
+/* To ensure the paragraph containing "Solicitações de Eventos" stays on one line: */
+/* 1. Inspect the <p> tag in your browser's developer tools.
+   2. Find a unique class or ID on the <p> tag itself, or on a parent element.
+   3. Replace ".your-specific-selector-for-this-paragraph" below with the correct selector.
+
+   Examples:
+   - If HTML is: <p class="section-title">Solicitações de Eventos</p>
+     Use selector: .section-title
+
+   - If HTML is: <div class="event-requests-header"><p>Solicitações de Eventos</p></div>
+     Use selector: .event-requests-header p
+*/
+
+/* Target the <p> tag within elements having class "nav-link" */
+/* This rule is now more specific to the sidebar below */
+/*
+.nav-link p {
+    white-space: nowrap !important; 
+    overflow: hidden;         
+    text-overflow: ellipsis;  
+    display: inline-block;    
+    vertical-align: middle;   
+    margin-bottom: 0;         
+    color: var(--theme-blue); 
+}
+*/
+
+/* Suggestions for common elements (Jazzmin might use different classes) */
+/*
+.btn-primary {
+    background-color: var(--theme-blue) !important;
+    border-color: var(--theme-blue) !important;
+    color: var(--theme-text-light) !important;
+}
+.btn-primary:hover {
+    background-color: #003366 !important; // Darker blue for hover
+    border-color: #003366 !important;
+}
+
+.btn-danger {
+    background-color: var(--theme-red) !important;
+    border-color: var(--theme-red) !important;
+    color: var(--theme-text-light) !important;
+}
+.btn-danger:hover {
+    background-color: #b71c1c !important; // Darker red for hover
+    border-color: #b71c1c !important;
+}
+
+.card {
+    border: 1px solid var(--theme-border-light);
+    // box-shadow: 0 2px 4px rgba(0,0,0,.1); // Mackenzie uses subtle shadows
+}
+*/
+
+/* Main Header (Navbar) Styling */
+.main-header.navbar { /* Jazzmin main navbar */
+    background-color: var(--theme-blue) !important;
+}
+.main-header.navbar .nav-link { /* Links within the main navbar */
+    color: var(--theme-text-light) !important;
+}
+.main-header.navbar .nav-link:hover {
+    color: rgba(255,255,255,0.8) !important; /* Slightly transparent white on hover */
+}
+
+/* Main Sidebar Styling */
+.main-sidebar { /* Jazzmin sidebar */
+    background-color: var(--theme-blue) !important; /* Dark blue background for sidebar */
+}
+
+/* Styling for text and icons within sidebar links */
+.main-sidebar .nav-link p {
+    color: var(--theme-text-light) !important; /* White text for dark blue sidebar */
+    white-space: nowrap !important; 
+    overflow: hidden;         
+    text-overflow: ellipsis;  
+    display: inline-block;    
+    vertical-align: middle;   
+    margin-bottom: 0;
+}
+.main-sidebar .nav-link i { /* Icons inside sidebar links */
+    color: var(--theme-text-light) !important; /* White icons */
+}
+
+/* Styling for active link in the sidebar */
+.main-sidebar .nav-link.active {
+    background-color: var(--theme-red) !important; /* Active link with red background */
+    color: var(--theme-text-light) !important; /* Ensure main link color is also light */
+}
+/* Ensure text and icon within active link are also light */
+.main-sidebar .nav-link.active p, 
+.main-sidebar .nav-link.active i {
+    color: var(--theme-text-light) !important;
+}
+
+/* Styling for Main Content Area (Dashboard) */
+/* ATENÇÃO: O seletor .content-wrapper é comum, mas pode variar no Jazzmin.
+   Verifique com o "Inspecionar Elemento" do seu navegador. */
+.content-wrapper {
+    /* Revertendo o fundo para o padrão ou o que estava antes.
+       Removendo as propriedades de degradê. */
+    /* 
+    background-image: linear-gradient(
+        to bottom, 
+        var(--theme-gradient-start) 0%, 
+        var(--theme-gradient-mid) 50%, 
+        var(--theme-gradient-end) 100%
+    ) !important;
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    */
+    /* Se você tinha uma cor de fundo sólida específica antes, pode restaurá-la aqui.
+       Exemplo: background-color: var(--theme-background-light); 
+       Ou deixe em branco para usar o padrão do Jazzmin.
+    */
+}
+
+/* Se o conteúdo dentro do .content-wrapper (como cards, tabelas) 
+   precisar de um fundo sólido para legibilidade sobre o degradê: */
+/*
+.content-wrapper .card,
+.content-wrapper .info-box,
+.content-wrapper .table {
+    background-color: var(--theme-white) !important; 
+}
+*/

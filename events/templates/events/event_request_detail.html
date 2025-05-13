@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} - Interliga Mack{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">Informações do Evento: {{ event_request.event.title }}</h5>
+        <p class="card-text"><small class="text-muted">Solicitado em: {{ event_request.request_date|date:"d/m/Y H:i" }} | Status: <span class="badge bg-{% if event_request.status == 'pending' %}warning text-dark{% elif event_request.status == 'approved' %}success{% elif event_request.status == 'rejected' %}danger{% elif event_request.status == 'in_progress' %}info text-dark{% elif event_request.status == 'completed' %}primary{% elif event_request.status == 'cancelled' %}secondary{% endif %}">{{ event_request.get_status_display }}</span></small></p>
+    </div>
+    <div class="card-body">
+        <h6>Detalhes do Evento:</h6>
+        <p><strong>Programação:</strong> {{ event_request.event.program|linebreaksbr }}</p>
+        <p><strong>Data:</strong> {{ event_request.event.date|date:"d/m/Y" }}</p>
+        <p><strong>Horário:</strong> {{ event_request.event.start_time|time:"H:i" }}{% if event_request.event.end_time %} - {{ event_request.event.end_time|time:"H:i" }}{% endif %}</p>
+        <p><strong>Local:</strong> {{ event_request.event.location }}</p>
+        {% if event_request.event.speaker_bios %}<p><strong>Currículos dos Palestrantes:</strong> {{ event_request.event.speaker_bios|linebreaksbr }}</p>{% endif %}
+        {% if event_request.event.invitation_details %}<p><strong>Detalhes do Convite:</strong> {{ event_request.event.invitation_details|linebreaksbr }}</p>{% endif %}
+        {% if event_request.event.devotional_text %}<p><strong>Devocional:</strong> {{ event_request.event.devotional_text|linebreaksbr }}</p>{% endif %}
+
+        <hr>
+        <h6>Serviços Solicitados:</h6>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <strong>Sonorização:</strong> {% if event_request.needs_sound_system %}Sim{% else %}Não{% endif %}
+                {% if event_request.needs_sound_system and event_request.sound_system_details %}<br><small><em>Detalhes: {{ event_request.sound_system_details|linebreaksbr }}</em></small>{% endif %}
+            </li>
+            <li class="list-group-item">
+                <strong>Fotografia:</strong> {% if event_request.needs_photography %}Sim{% else %}Não{% endif %}
+                {% if event_request.needs_photography and event_request.photography_details %}<br><small><em>Detalhes: {{ event_request.photography_details|linebreaksbr }}</em></small>{% endif %}
+            </li>
+            <li class="list-group-item">
+                <strong>Apoio/Limpeza:</strong> {% if event_request.needs_support_cleaning %}Sim{% else %}Não{% endif %}
+                {% if event_request.needs_support_cleaning and event_request.support_cleaning_details %}<br><small><em>Detalhes: {{ event_request.support_cleaning_details|linebreaksbr }}</em></small>{% endif %}
+            </li>
+            <li class="list-group-item">
+                <strong>Gravação/Transmissão:</strong> {% if event_request.needs_recording_transmission %}Sim{% else %}Não{% endif %}
+                {% if event_request.needs_recording_transmission and event_request.recording_transmission_details %}<br><small><em>Detalhes: {{ event_request.recording_transmission_details|linebreaksbr }}</em></small>{% endif %}
+            </li>
+            <li class="list-group-item">
+                <strong>Cobertura Jornalística:</strong> {% if event_request.needs_journalistic_coverage %}Sim{% else %}Não{% endif %}
+                {% if event_request.needs_journalistic_coverage and event_request.journalistic_coverage_details %}<br><small><em>Detalhes: {{ event_request.journalistic_coverage_details|linebreaksbr }}</em></small>{% endif %}
+            </li>
+            <li class="list-group-item">
+                <strong>Manutenção:</strong> {% if event_request.needs_maintenance %}Sim{% else %}Não{% endif %}
+                {% if event_request.needs_maintenance and event_request.maintenance_details %}<br><small><em>Detalhes: {{ event_request.maintenance_details|linebreaksbr }}</em></small>{% endif %}
+            </li>
+            {% if event_request.auditorium_requested %}
+            <li class="list-group-item">
+                <strong>Auditório Solicitado:</strong> {{ event_request.auditorium_requested }}
+            </li>
+            {% endif %}
+        </ul>
+
+        {% if event_request.internal_notes %}
+        <hr>
+        <h6>Observações Internas (para equipe de cerimonial):</h6>
+        <p>{{ event_request.internal_notes|linebreaksbr }}</p>
+        {% endif %}
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'list_my_event_requests' %}" class="btn btn-secondary">Voltar para Minhas Solicitações</a>
+        <!-- Futuramente: botões para editar ou cancelar, dependendo do status -->
+    </div>
+</div>
+{% endblock %}
