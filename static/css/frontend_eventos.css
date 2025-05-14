@@ -1,100 +1,194 @@
-/* Estilos gerais da página de listagem de eventos */
-.event-listing-page {
-    background-color: #141414; /* Fundo escuro principal, tipo Netflix */
-    min-height: 100vh; /* Garante que o fundo ocupe toda a altura da tela */
+/* Estilo inspirado em: https://dribbble.com/shots/25012631-Eventify-Dark-Blue-Event-Conference-Website */
+
+body {
+    background-color: #0A122A !important; /* Cor de fundo mais escura para todo o corpo da página - ADICIONADO !important */
+    color: #A6B0C3; /* Cor de texto padrão para o tema escuro */
+}
+
+/*
+  O seu base.html tem um <div id="page-content"> que contém <div class="container">.
+  Este .container em base.html tem um estilo inline ou em <style> com background-color: white.
+  Precisamos sobrescrevê-lo para que o fundo escuro do body apareça.
+  Esta regra é CRUCIAL.
+*/
+#page-content > .container {
+    background-color: transparent !important; /* Torna o container principal de base.html transparente */
+    box-shadow: none !important; /* Remove a sombra que não faria sentido em um fundo escuro */
+    padding: 0 !important; /* Remove o padding, as páginas filhas cuidarão do seu próprio padding se necessário */
+}
+
+/* Estilos Globais para a Página de Listagem e Detalhes de Eventos */
+.event-listing-page,
+.event-detail-page { /* Adicionada a nova classe aqui */
+    /* background-color: #101D3B; /* Azul escuro profundo, mais próximo do Dribbble */
+    /* Tentativa de gradiente: de um azul marinho escuro para um azul um pouco mais claro, com um toque sutil de vermelho no meio ou borda */
+    background-image: linear-gradient(to bottom, #0A122A 0%, #101D3B 30%, #18274B 70%, #0A122A 100%);
+    /* Para adicionar um toque de vermelho, poderia ser mais complexo, ex:
+       background-image: radial-gradient(ellipse at bottom, #4D1A22 0%, transparent 60%),
+                         linear-gradient(to bottom, #0A122A 0%, #101D3B 50%, #18274B 100%);
+       Ou um gradiente com mais 'stops' de cor.
+       Vamos começar com um gradiente azul mais simples e podemos refinar.
+       Se quiser um toque de vermelho mais direto, podemos usar um gradiente com 3 cores:
+       background-image: linear-gradient(160deg, #0A122A 0%, #var(--mackenzie-red) 50%, #101D3B 100%);
+       Isso seria bem forte. Para algo mais sutil, o radial-gradient acima é uma opção, ou
+       um gradiente linear com uma parada de cor vermelha muito pequena e translúcida.
+
+       Opção com um toque de vermelho mais sutil no fundo, misturado:
+       background-image: linear-gradient(to bottom right, #0A122A, #101D3B, rgba(80, 20, 25, 0.3), #101D3B, #0A122A);
+       Vamos usar um gradiente azul escuro por enquanto e ajustar se necessário.
+    */
+    background-color: #0A122A; /* Fallback caso o gradiente não seja suportado ou para simplificar */
+    min-height: 100vh; /* Garante que o fundo cubra a tela */
     padding-top: 20px;
-    padding-bottom: 40px;
+    padding-bottom: 40px; /* Espaço no final */
+}
+
+/* Ajusta o título principal da página (que vem do base.html com classe .page-title-custom) 
+   para o tema escuro da página de eventos */
+.event-listing-page + .container .page-title-custom, /* Se o título estiver fora do .event-listing-page mas no mesmo nível do container */
+body.dark-theme .page-title-custom, /* Se você adicionar uma classe ao body para temas escuros */
+#page-content > .container > h1.page-title-custom { /* Seletor mais direto para o h1 no base.html */
+    color: #FFFFFF !important; /* Título principal branco */
+    font-weight: 600 !important;
+    margin-bottom: 30px !important; 
+    padding-top: 20px !important; /* Adicionado para consistência */
+    text-align: center; /* Centraliza o título como estava antes */
 }
 
 .page-title-events {
-    color: #e5e5e5; /* Cor clara para o título principal */
-    font-weight: bold;
-    margin-bottom: 30px !important; /* Sobrescreve o mb-4 para mais espaço */
+    color: #FFFFFF; /* Título principal branco */
+    font-weight: 600;
+    margin-bottom: 30px !important; 
+    padding-top: 20px;
 }
 
-/* Estilos para a grade de cards */
-.event-grid {
-    /* O Bootstrap já cuida do layout da grade com row e col, 
-       mas podemos adicionar estilos específicos se necessário. */
+/* Estilo dos Cards de Evento */
+.event-card-dribbble {
+    background-color: #1A294A; /* Cor de fundo do card, azul escuro */
+    border-radius: 12px; /* Bordas arredondadas */
+    border: 1px solid #2A3C6A; /* Borda sutil azulada */
+    overflow: hidden; /* Garante que a imagem não ultrapasse as bordas arredondadas */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Para garantir altura consistente com Bootstrap .h-100 */
 }
 
-/* Estilos para o link que envolve o card */
-.event-card-link {
+.event-card-dribbble:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px rgba(74, 144, 226, 0.2); /* Sombra azulada no hover */
+}
+
+.event-card-link-wrapper { 
     text-decoration: none;
-    color: inherit; /* Remove sublinhado e herda cor do texto */
-    display: block; /* Faz o link ocupar todo o espaço do card */
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    border-radius: 8px; /* Para o efeito de sombra e hover */
 }
 
-.event-card-link:hover {
-    transform: scale(1.05); /* Efeito de zoom no card inteiro */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7); /* Sombra mais pronunciada */
-}
-
-/* Estilos para o card (baseado no .card do Bootstrap, mas com customizações) */
-.event-card-netflix {
-    background-color: #1c1c1c; /* Cor de fundo do card, um pouco mais clara que o body */
-    border: none; /* Remove a borda padrão do Bootstrap card */
-    border-radius: 8px;
-    overflow: hidden; /* Importante para o card-img-overlay e cantos arredondados da imagem */
-    position: relative; /* Necessário para o posicionamento absoluto do overlay */
-    color: #fff; /* Cor padrão do texto dentro do card */
-    height: 100%; /* Garante que todos os cards na mesma linha tenham a mesma altura (Bootstrap .h-100) */
-}
-
-/* Estilos para a imagem do card */
-.event-card-img {
+.event-card-dribbble .event-card-img {
     width: 100%;
-    height: 200px; /* Altura fixa para a imagem, ajuste conforme necessário */
+    height: 180px; /* Altura da imagem do evento */
     object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
-    display: block;
-    border-top-left-radius: 8px; /* Arredonda os cantos superiores se o card tiver borda */
-    border-top-right-radius: 8px;
-    transition: opacity 0.3s ease-in-out;
 }
 
-.event-card-link:hover .event-card-img {
-    opacity: 0.8; /* Levemente escurece a imagem no hover para destacar o overlay */
+.event-card-dribbble .card-body-dribbble {
+    padding: 15px 20px 20px; /* Espaçamento interno do corpo do card */
+    color: #A6B0C3; /* Cor do texto padrão dentro do card (cinza azulado claro) */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Faz o corpo do card ocupar o espaço restante */
 }
 
-/* Estilos para o overlay sobre a imagem */
-.event-card-overlay-netflix {
-    /* Bootstrap .card-img-overlay já define position: absolute e padding.
-       d-flex flex-column justify-content-end ajuda a posicionar o conteúdo no final. */
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 100%);
-    padding: 1rem; /* Ajusta o padding padrão do card-img-overlay se necessário */
-    border-bottom-left-radius: 8px; /* Garante que o overlay acompanhe o card */
-    border-bottom-right-radius: 8px;
+.event-card-dribbble .event-title-dribbble {
+    font-size: 1.15rem; /* Tamanho do título do evento */
+    font-weight: 600;
+    color: #FFFFFF; /* Cor do título do evento */
+    margin-bottom: 8px;
+    line-height: 1.3;
 }
 
-/* Estilos para o título do evento no overlay */
-.event-card-title-netflix {
-    color: #fff;
-    font-size: 1.1rem; /* Ajuste o tamanho da fonte conforme necessário */
-    font-weight: bold;
-    margin-bottom: 0; /* Remove margem inferior padrão do h5 */
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* Sombra leve no texto para legibilidade */
+.event-card-dribbble .event-meta-dribbble {
+    font-size: 0.85rem; /* Tamanho do texto para data e local */
+    color: #828BA2; /* Cor mais suave para metadados */
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
 }
 
-/* Estilos para a data (se decidir adicioná-la de volta ao overlay) */
-.event-card-date-netflix {
+.event-card-dribbble .event-meta-dribbble i { /* Estilo para ícones (se usar Font Awesome) */
+    margin-right: 8px;
+    color: #6542F4; /* Cor dos ícones (roxo do Dribbble) */
+    font-size: 0.9em;
+}
+
+.event-card-dribbble .btn-view-details {
+    background-color: var(--mackenzie-red, #B81D24); /* Vermelho Mackenzie como cor principal, com fallback */
+    color: white !important; /* Texto branco, !important para garantir */
+    border: 1px solid var(--mackenzie-red-dark, #8C161A); /* Borda um pouco mais escura que o fundo do botão */
+    padding: 8px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-top: 15px; /* Espaço acima do botão */
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; /* Transições suaves */
+}
+
+.event-card-dribbble .btn-view-details:hover {
+    background-color: var(--mackenzie-red-dark, #8C161A); /* Vermelho mais escuro no hover */
+    color: white !important; /* Mantém texto branco */
+    border-color: var(--mackenzie-red-darker, #5A0E10); /* Borda ainda mais escura no hover */
+}
+
+/* Estilo para o botão TV Mackenzie no card */
+.btn-tv-mackenzie {
+    background-color: #005DAA; /* Azul, pode ser ajustado para a identidade da TV Mackenzie */
+    color: white !important;
+    border: 1px solid #004C8C;
     font-size: 0.8rem;
-    color: #b3b3b3; /* Cor mais suave para a data */
-    margin-top: 5px;
+    width: 100%; /* Para ocupar a largura do card */
+    display: block;
 }
 
-/* Estilos para a mensagem de "sem eventos" */
-.event-listing-page .text-center.py-5 h1.display-4 {
-    color: #6c757d !important; /* Cor do texto 'text-muted' do Bootstrap */
+.btn-tv-mackenzie:hover {
+    background-color: #004C8C;
+    color: white !important;
 }
-.event-listing-page .text-center.py-5 .lead {
-    color: #adb5bd;
+
+/* Estilo para o botão TV Mackenzie na página de detalhes */
+.btn-tv-mackenzie-detail {
+    background-color: #005DAA; /* Mesmo azul */
+    color: white !important;
+    border: 1px solid #004C8C;
+    padding: 10px 20px;
+    font-size: 1.1rem;
 }
-.event-listing-page .text-center.py-5 a {
-    color: var(--theme-blue, #007bff); /* Usa a variável de tema se definida, senão um azul padrão */
-    text-decoration: underline;
+
+.btn-tv-mackenzie-detail:hover {
+    background-color: #004C8C;
+    color: white !important;
 }
-.event-listing-page .text-center.py-5 a:hover {
-    color: var(--theme-red, #dc3545); /* Usa a variável de tema se definida, senão um vermelho padrão */
+
+/* Estilo para a mensagem de "Sem eventos" */
+.no-events-message {
+    color: #828BA2; /* Cor do texto para a mensagem */
+}
+.no-events-message .display-4 {
+    color: #A6B0C3;
+}
+.no-events-message a {
+    color: #6542F4; /* Cor do link (roxo do Dribbble) */
+}
+.no-events-message a:hover {
+    color: #F441A5; /* Cor do link no hover (rosa do Dribbble) */
+}
+
+/* Limpeza de estilos antigos (se necessário) */
+.event-card-netflix, 
+.event-card-overlay-netflix, 
+.event-card-title-netflix, 
+.event-card-date-netflix,
+.event-card-link {
+    /* Se houver conflitos, pode ser necessário resetar propriedades aqui,
+       mas idealmente as novas classes .event-card-dribbble e suas filhas
+       serão específicas o suficiente. */
 }

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ event.name|default:"Detalhes do Evento" }} - Interliga Mack{% endblock %}
+
+{% block extra_head %}
+    {{ block.super }}
+    
+    <link rel="stylesheet" href="{% static 'css/frontend_eventos.css' %}"> {# ESTA LINHA DEVE SER frontend_eventos.css #}
+    {# Adicione aqui outros CSS específicos para a página de detalhes, se necessário #}
+    <style>
+        /* Estilos específicos para a página de detalhes, se houver poucos */
+        .event-detail-content {
+            background-color: #1A294A; /* Cor de fundo do card, azul escuro */
+            color: #A6B0C3;
+            padding: 25px 30px;
+            border-radius: 12px;
+            border: 1px solid #2A3C6A;
+            margin-top: 20px; /* Espaço abaixo do título da página */
+        }
+        .event-detail-content img.event-image-detail {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #2A3C6A;
+        }
+        .event-detail-content h2 {
+            color: #FFFFFF;
+            margin-bottom: 15px;
+        }
+        .event-detail-content p {
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+        .event-detail-content strong {
+            color: #C9D1D9;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="event-detail-page"> {# Classe para aplicar o fundo de gradiente #}
+    {# O título H1 virá do base.html usando a variável page_title passada pela view #}
+    {# Exemplo de como a view deve passar: context['page_title'] = event.name #}
+    
+    <div class="container"> {# Container para centralizar o conteúdo dos detalhes #}
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <article class="event-detail-content">
+                    {% if event.imagem_destaque %}
+                        <img src="{{ event.imagem_destaque.url }}" alt="{{ event.name }}" class="img-fluid event-image-detail">
+                    {% elif event.image %}
+                        <img src="{{ event.image.url }}" alt="{{ event.name }}" class="img-fluid event-image-detail">
+                    {% endif %}
+
+                    <h2>{{ event.name }}</h2>
+                    
+                    <p><strong>Data:</strong> {{ event.date|date:"d/m/Y" }}
+                        {% if event.start_time %}
+                            às {{ event.start_time|time:"H:i" }}
+                        {% endif %}
+                    </p>
+                    
+                    {% if event.location %}
+                        <p><strong>Local:</strong> {{ event.location }}</p>
+                    {% endif %}
+                    
+                    {% if event.description %}
+                        <p><strong>Descrição:</strong></p>
+                        <div class="event-description">
+                            {{ event.description|linebreaksbr }}
+                        </div>
+                    {% endif %}
+
+                    {# Adicione outros detalhes do evento aqui conforme necessário #}
+                    
+                    {# Exemplo de botão de voltar, se desejar #}
+                    <div class="mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-outline-light">Voltar para Eventos</a>
+                        {# Ajuste a URL de voltar se for diferente #}
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

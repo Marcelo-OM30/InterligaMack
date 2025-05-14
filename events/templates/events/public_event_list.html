@@ -1,4 +1,3 @@
-<!-- filepath: /home/marcelo/interligaMack/events/templates/events/public_event_list.html -->
 {% extends "base.html" %}
 {% load static %}
 
@@ -9,18 +8,21 @@
     {# Certifique-se que seu base.html tem um bloco extra_head ou similar, #}
     {# ou coloque este link onde você costuma adicionar CSS específico da página. #}
     <link rel="stylesheet" href="{% static 'css/frontend_eventos.css' %}">
+    {# Adicionar link para Font Awesome se quiser usar ícones como no Dribbble - opcional #}
+    {# <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> #}
 {% endblock %}
 
 {% block content %}
 <div class="container py-4 event-listing-page">
-    <h1 class="mb-4 text-center page-title-events">Próximos Eventos</h1>
+    {# O título <h1 class="mb-4 text-center page-title-events">Eventos</h1> foi removido daqui. #}
+    {# O título da página agora será controlado pela variável 'page_title' passada pela view e renderizada no base.html #}
 
     {% if events %}
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 event-grid justify-content-center">
             {% for event in events %}
             <div class="col">
-                <a href="{% url 'events:public_event_detail' event.id %}" class="event-card-link">
-                    <div class="card h-100 event-card-netflix">
+                <div class="card h-100 event-card-dribbble"> {# Nova classe base para o card #}
+                    <a href="{% url 'events:public_event_detail' event.id %}" class="event-card-link-wrapper">
                         {# Tenta imagem_destaque primeiro, depois image, depois placeholder #}
                         {% if event.imagem_destaque %}
                             <img src="{{ event.imagem_destaque.url }}" class="card-img-top event-card-img" alt="{{ event.name }}">
@@ -29,27 +31,35 @@
                         {% else %}
                             <img src="{% static 'images/no_events_placeholder.svg' %}" class="card-img-top event-card-img" alt="Evento sem imagem">
                         {% endif %}
+                    </a>
+                    <div class="card-body-dribbble"> {# Nova classe para o corpo do card #}
+                        <h5 class="event-title-dribbble">{{ event.name }}</h5>
+                        <p class="event-meta-dribbble">
+                            <i class="fas fa-calendar-alt"></i> {{ event.date|date:"d/m/Y" }} 
+                            {% if event.date %}
+                                <span class="event-time"> <i class="fas fa-clock"></i> {{ event.date|time:"H:i" }}</span>
+                            {% endif %}
+                        </p>
+                        <p class="event-meta-dribbble">
+                            <i class="fas fa-map-marker-alt"></i> {{ event.location|truncatewords:5 }}
+                        </p>
                         
-                        {# Overlay para o título, estilo Netflix #}
-                        <div class="card-img-overlay event-card-overlay-netflix d-flex flex-column justify-content-end">
-                            <h5 class="card-title event-card-title-netflix">{{ event.name }}</h5>
-                            {# Poderia adicionar a data aqui de forma sutil se desejado #}
-                            {# <p class="event-card-date-netflix"><small>{{ event.date|date:"d/m" }}</small></p> #}
-                        </div>
+                        {% if event.stream_link %}
+                        <a href="{{ event.stream_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-tv-mackenzie mt-2 mb-2">
+                            <i class="fas fa-tv"></i> Assistir na TV Mackenzie
+                        </a>
+                        {% endif %}
 
-                        {# O conteúdo original do card-body e card-footer foi removido/simplificado #}
-                        {# para um visual mais limpo, focado na imagem e título no overlay. #}
-                        {# Detalhes como descrição, data completa, status, e botão "Ver Detalhes" #}
-                        {# idealmente ficariam na página de detalhes do evento. #}
-                        {# Se precisar muito de um botão, podemos estilizá-lo para aparecer no hover, por exemplo. #}
+                        <!-- Botão Ver Detalhes -->
+                        <a href="{% url 'events:public_event_detail' event.pk %}" class="btn btn-view-details {% if not event.stream_link %}mt-auto{% endif %}">Ver Detalhes</a>
                     </div>
-                </a>
+                </div>
             </div>
             {% endfor %}
         </div>
     {% else %}
-        <div class="text-center py-5">
-            <h1 class="display-4 text-muted">Sem eventos no momento</h1>
+        <div class="text-center py-5 no-events-message"> {# Nova classe para estilizar a mensagem #}
+            <h1 class="display-4">Sem eventos no momento</h1>
             <p class="lead mt-3">Por favor, volte mais tarde.</p>
             {% if user.is_authenticated and user.user_type == 'solicitante' %}
                 <p class="mt-3">Que tal <a href="{% url 'events:create_event_request' %}">solicitar um novo evento</a>?</p> {# Assumindo que 'events:create_event_request' é o nome da sua URL #}

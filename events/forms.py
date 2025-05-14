@@ -1,5 +1,5 @@
 from django import forms
-from .models import Event, EventRequest
+from .models import Event, Speaker, EventRequest
 
 class EventRequestForm(forms.ModelForm):
     class Meta:
@@ -154,11 +154,13 @@ class EventForm(forms.ModelForm):
             'contact_email',  
             'contact_phone',
             'event_request', # Adicionado para permitir vincular a uma solicitação
+            'speakers' # Adicionado o campo speakers
         ]
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
             'short_description': forms.Textarea(attrs={'rows': 3}),
             'long_description': forms.Textarea(attrs={'rows': 6}),
+            'speakers': forms.CheckboxSelectMultiple, # Widget para melhor seleção de múltiplos palestrantes
             # 'image' não precisa de widget customizado aqui se o __init__ cuida da classe
         }
         help_texts = {
@@ -203,3 +205,6 @@ class EventForm(forms.ModelForm):
             elif isinstance(widget, forms.ClearableFileInput):
                 current_class = widget.attrs.get('class', '')
                 widget.attrs['class'] = f'{current_class} form-control'.strip()
+        # Opcional: Ordenar palestrantes por nome no formulário
+        if 'speakers' in self.fields:
+            self.fields['speakers'].queryset = Speaker.objects.order_by('name')

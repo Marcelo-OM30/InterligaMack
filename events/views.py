@@ -87,7 +87,7 @@ def public_event_list(request):
 
     context = {
         'events': events,
-        'page_title': 'Próximos Eventos' # Um título para a página
+        'page_title': 'Eventos' # ALTERADO DE "Próximos Eventos" PARA "Eventos"
     }
     # Usaremos um novo template para esta lista pública
     return render(request, 'events/public_event_list.html', context)
@@ -100,6 +100,7 @@ def add_event_view(request):
             event = form.save(commit=False)
             event.created_by = request.user # Associa o evento ao usuário logado
             event.save()
+            form.save_m2m() # Salva as relações ManyToMany (como speakers)
             messages.success(request, 'Evento adicionado com sucesso!')
             return redirect('events:public_event_list') # Ou para uma lista de eventos no admin
     else:

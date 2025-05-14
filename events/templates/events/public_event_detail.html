@@ -1,75 +1,200 @@
-<!-- filepath: /home/marcelo/interligaMack/events/templates/events/public_event_detail.html -->
 {% extends "base.html" %}
 {% load static %}
 
 {% block title %}{{ page_title|default:"Detalhes do Evento" }} - Interliga Mack{% endblock %}
 
 {% block extra_head %}
-    {# Você pode adicionar CSS específico para esta página aqui, se necessário #}
-    <link rel="stylesheet" href="{% static 'css/frontend_event_detail.css' %}"> {# Exemplo #}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/frontend_eventos.css' %}">
     <style>
-        .event-detail-container {
-            padding: 20px;
+        .event-detail-content-box { 
+            background-color: #1A294A; 
+            color: #A6B0C3;
+            padding: 25px 30px;
+            border-radius: 12px;
+            border: 1px solid #2A3C6A; /* Borda original restaurada */
+            margin-top: 20px; 
         }
-        .event-detail-image {
+        .event-detail-content-box img.event-image-detail {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
             margin-bottom: 20px;
+            border: 1px solid #2A3C6A; 
         }
-        .event-detail-title {
-            color: var(--mackenzie-red, #d42027); /* Cor do título, usando variável do base.html */
-        }
-        .event-detail-meta {
-            color: #555;
+        .event-detail-content-box h2.event-title-detail { 
+            color: #FFFFFF;
             margin-bottom: 15px;
+            font-size: 1.75rem; 
         }
-        .event-detail-description {
-            line-height: 1.6;
+        .event-detail-content-box p {
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+        .event-detail-content-box strong {
+            color: #C9D1D9;
+        }
+        .event-detail-content-box .event-description h4 { 
+             color: #FFFFFF !important; 
+             margin-bottom: 10px;
+             font-size: 1.2rem;
+        }
+        .breadcrumb {
+            background-color: transparent !important; 
+            padding-left: 0;
+            margin-bottom: 1rem; 
+        }
+        .breadcrumb-item a {
+            color: #C9D1D9 !important; 
+        }
+        .breadcrumb-item a:hover {
+            color: #FFFFFF !important;
+        }
+        .breadcrumb-item.active {
+            color: #A6B0C3 !important; 
+        }
+
+        /* Estilos para a seção de palestrantes */
+        .speakers-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #2A3C6A; /* Separador sutil */
+        }
+        .speakers-section h3 {
+            color: #FFFFFF;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        .speaker-card {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #223355; /* Separador entre palestrantes */
+        }
+        .speaker-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .speaker-photo img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 2px solid #2A3C6A;
+        }
+        .speaker-info h4 {
+            color: #E0E0E0;
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+        .speaker-info .speaker-bio {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #A6B0C3;
+        }
+        .speaker-info .speaker-lattes a {
+            color: #65AFFF; /* Cor de link azul claro */
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .speaker-info .speaker-lattes a:hover {
+            text-decoration: underline;
         }
     </style>
 {% endblock %}
 
 {% block content %}
-<div class="container event-detail-container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Eventos</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ event.name }}</li>
-        </ol>
-    </nav>
+<div class="event-detail-page"> 
+    <div class="container"> 
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Eventos</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ event.name }}</li>
+            </ol>
+        </nav>
 
-    <h1 class="event-detail-title mb-3">{{ event.name }}</h1>
+        {# O título H1 principal da página virá do base.html através da variável page_title #}
+        {# A view deve passar context['page_title'] = event.name #}
 
-    {% if event.imagem_destaque %}
-        <img src="{{ event.imagem_destaque.url }}" alt="{{ event.name }}" class="img-fluid event-detail-image">
-    {% elif event.image %}
-         <img src="{{ event.image.url }}" alt="{{ event.name }}" class="img-fluid event-detail-image">
-    {% endif %}
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <article class="event-detail-content-box"> 
+                    {% if event.imagem_destaque %}
+                        <img src="{{ event.imagem_destaque.url }}" alt="{{ event.name }}" class="img-fluid event-image-detail">
+                    {% elif event.image %}
+                         <img src="{{ event.image.url }}" alt="{{ event.name }}" class="img-fluid event-image-detail">
+                    {% endif %}
 
-    <div class="event-detail-meta">
-        <p><strong>Data:</strong> {{ event.date|date:"d/m/Y H:i" }}</p>
-        <p><strong>Local:</strong> {{ event.location }}</p>
-        {% if event.organizer_name %}
-            <p><strong>Organizador:</strong> {{ event.organizer_name }}</p>
-        {% endif %}
-    </div>
+                    <h2 class="event-title-detail">{{ event.name }}</h2>
+                  
+                    <div class="event-detail-meta">
+                        <p><strong>Data:</strong> {{ event.date|date:"d/m/Y" }}
+                            {% if event.date %} <!-- Verifica se event.date (DateTimeField) existe -->
+                                às {{ event.date|time:"H:i" }}
+                            {% endif %}
+                        </p>
+                        <p><strong>Local:</strong> {{ event.location }}</p>
+                        {% if event.organizer_name %}
+                            <p><strong>Organizador:</strong> {{ event.organizer_name }}</p>
+                        {% endif %}
+                    </div>
 
-    <div class="event-detail-description">
-        <h4>Descrição:</h4>
-        {% if event.long_description %}
-            {{ event.long_description|linebreaks }}
-        {% elif event.short_description %}
-            {{ event.short_description|linebreaks }}
-        {% else %}
-            <p>Mais informações sobre este evento serão disponibilizadas em breve.</p>
-        {% endif %}
-    </div>
+                    <div class="event-detail-description">
+                        <h4>Descrição:</h4> 
+                        {% if event.long_description %}
+                            {{ event.long_description|linebreaksbr }}
+                        {% elif event.short_description %}
+                            {{ event.short_description|linebreaksbr }}
+                        {% else %}
+                            <p>Mais informações sobre este evento serão disponibilizadas em breve.</p>
+                        {% endif %}
+                    </div>
 
-    {# Adicione mais detalhes do evento aqui conforme necessário #}
+                    {% if event.stream_link %}
+                    <div class="mt-3 mb-3 text-center">
+                        <a href="{{ event.stream_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-tv-mackenzie-detail">
+                            <i class="fas fa-tv"></i> Assistir ao vivo na TV Mackenzie
+                        </a>
+                    </div>
+                    {% endif %}
 
-    <div class="mt-4">
-        <a href="{% url 'home' %}" class="btn btn-secondary">Voltar para a lista de eventos</a>
+                    {# Seção de Palestrantes #}
+                    {% if event.speakers.all %}
+                    <section class="speakers-section">
+                        <h3>Palestrantes</h3>
+                        {% for speaker in event.speakers.all %}
+                        <div class="speaker-card">
+                            {% if speaker.photo %}
+                            <div class="speaker-photo">
+                                <img src="{{ speaker.photo.url }}" alt="{{ speaker.name }}">
+                            </div>
+                            {% endif %}
+                            <div class="speaker-info">
+                                <h4>{{ speaker.name }}</h4>
+                                {% if speaker.bio %}
+                                <p class="speaker-bio">{{ speaker.bio|linebreaksbr }}</p>
+                                {% endif %}
+                                {% if speaker.lattes_link %}
+                                <p class="speaker-lattes">
+                                    <a href="{{ speaker.lattes_link }}" target="_blank" rel="noopener noreferrer">Currículo Lattes</a>
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </section>
+                    {% endif %}
+                    {# Fim da Seção de Palestrantes #}
+
+                    <div class="mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-outline-light">Voltar para a lista de eventos</a>
+                    </div>
+                </article>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

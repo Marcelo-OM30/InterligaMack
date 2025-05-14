@@ -1,5 +1,21 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
+
+class Speaker(models.Model):
+    name = models.CharField(max_length=200, verbose_name="Nome do Palestrante")
+    bio = models.TextField(blank=True, null=True, verbose_name="Minibiografia")
+    lattes_link = models.URLField(blank=True, null=True, verbose_name="Link do Currículo Lattes")
+    photo = models.ImageField(upload_to='speakers_photos/', blank=True, null=True, verbose_name="Foto")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Palestrante"
+        verbose_name_plural = "Palestrantes"
+        ordering = ['name']
+
 
 class EventRequest(models.Model):
     STATUS_CHOICES = [
@@ -41,6 +57,9 @@ class EventRequest(models.Model):
 
     auditorium_requested = models.CharField(max_length=100, blank=True, null=True, verbose_name='Auditório Solicitado')
     
+    stream_requested = models.BooleanField(default=False, verbose_name='Solicita Transmissão pela TV Mackenzie?')
+    suggested_stream_link = models.URLField(blank=True, null=True, verbose_name='Link Sugerido para Transmissão (se houver)')
+
     internal_notes = models.TextField(blank=True, null=True, verbose_name='Observações Internas')
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -100,6 +119,8 @@ class Event(models.Model):
         verbose_name='Status do Evento'
     )
     
+    stream_link = models.URLField(blank=True, null=True, verbose_name="Link da Transmissão (TV Mackenzie)")
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -108,6 +129,8 @@ class Event(models.Model):
         blank=True,                     
         null=True                       
     )
+
+    speakers = models.ManyToManyField(Speaker, blank=True, related_name="events", verbose_name="Palestrantes")
 
     def __str__(self):
         return self.name

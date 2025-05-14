@@ -13,7 +13,7 @@ def register(request):
             user.save()
             login(request, user) # Loga o usuário automaticamente após o registro
             messages.success(request, 'Registro realizado com sucesso! Você já está logado.')
-            return redirect('public_event_list') # Redireciona para a lista de eventos ou dashboard
+            return redirect('home') # Redireciona para a lista de eventos ou dashboard
         else:
             messages.error(request, 'Por favor, corrija os erros abaixo.')
     else:

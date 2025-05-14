@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import UserProfile
 
 class UserRegistrationForm(UserCreationForm):
-    email = forms.EmailField(required=True, help_text='Obrigatório. Um email válido para notificações.')
+    email = forms.EmailField(required=True, label='Email', help_text='Obrigatório. Um email válido para notificações.')
     first_name = forms.CharField(max_length=30, required=True, label='Nome')
     last_name = forms.CharField(max_length=150, required=True, label='Sobrenome')
     # registration_id = forms.CharField(max_length=100, required=False, label='Matrícula/ID (Opcional)')
@@ -17,6 +17,23 @@ class UserRegistrationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
+        
+        # Definir etiquetas em português para campos herdados do UserCreationForm
+        if 'username' in self.fields:
+            self.fields['username'].label = 'Nome de usuário'
+            # Você pode também ajustar o help_text aqui se necessário, por exemplo:
+            # self.fields['username'].help_text = 'Um nome de usuário único para acesso ao sistema.'
+        
+        if 'password1' in self.fields:
+            self.fields['password1'].label = 'Senha'
+            # O help_text padrão do password1 é útil, então geralmente não o removemos
+            # a menos que queiramos fornecer instruções personalizadas.
+            # Exemplo: self.fields['password1'].help_text = 'Sua senha deve conter pelo menos 8 caracteres...'
+
+        if 'password2' in self.fields:
+            self.fields['password2'].label = 'Confirmação de senha'
+            # self.fields['password2'].help_text = 'Repita a senha informada anteriormente.'
+
         # Não permitir que o usuário defina o tipo de usuário no formulário de registro público
         if 'user_type' in self.fields:
             self.fields['user_type'].widget = forms.HiddenInput()

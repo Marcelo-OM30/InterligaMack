@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% load static %} 
+
+{% block title %}Adicionar Evento - Interliga Mack{% endblock %}
+
+{% block extra_head %}
+    {{ block.super }}
+    <style>
+        .form-check-input-group {
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            padding: 10px; 
+            max-height: 250px; 
+            overflow-y: auto;
+            background-color: #f8f9fa; 
+        }
+        .speaker-debug-item { 
+            padding: 5px;
+            border: 1px dashed blue; 
+            margin-bottom: 5px;
+            display: block; 
+        }
+        .speaker-debug-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .speaker-debug-item .debug-label-text {
+            color: red !important; 
+            font-weight: bold !important;
+            font-size: 1.1em !important; 
+        }
+
+        /* Estilos para a renderização normal do form.check */
+        .form-check-input-group .form-check { /* Container para cada checkbox + label */
+            border: 2px solid green !important; 
+            padding: 5px !important;
+            margin-bottom: 5px !important;
+            background-color: #e0ffe0 !important; /* Fundo verde claro para o container */
+        }
+        .form-check-input-group .form-check input[type="checkbox"].form-check-input { /* Alvo no input do checkbox */
+            /* Estilos para o checkbox em si, se necessário, mas o foco é o label */
+            /* Bootstrap deve cuidar disso se a classe form-check-input estiver presente no input tag */
+            margin-right: 8px !important;
+        }
+        .form-check-input-group .form-check label.form-check-label { /* Alvo específico no label normal */
+            display: block !important; /* MUDADO para block, para ocupar sua própria linha e ter dimensões claras */
+            position: static !important; /* Garantir que não está absolute/fixed e escondido */
+            visibility: visible !important; 
+            opacity: 1 !important; 
+            color: #000000 !important; /* Preto puro */
+            background-color: #FFFF00 !important; /* Amarelo brilhante */
+            font-size: 16px !important; /* Tamanho de fonte explícito */
+            font-weight: bold !important; 
+            padding: 5px !important; /* Padding para torná-lo maior */
+            border: 2px solid #FF0000 !important; /* Borda vermelha grossa */
+            width: 90% !important; /* Largura explícita, mas não 100% para ver a borda do container */
+            min-height: 20px !important; /* Altura mínima explícita */
+            text-indent: 0 !important;
+            line-height: normal !important;
+            overflow: visible !important; /* Garantir que o texto não seja cortado se maior que a caixa */
+            z-index: 9999 !important; /* Trazer para frente de tudo */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    {# O título H1 já vem do base.html usando a variável page_title passada pela view #}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+                {{ form.name }}
+                {% if form.name.errors %}<div class="invalid-feedback d-block">{{ form.name.errors|join:", " }}</div>{% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.date.id_for_label }}" class="form-label">{{ form.date.label }}</label>
+                {{ form.date }}
+                {% if form.date.help_text %}<small class="form-text text-muted">{{ form.date.help_text }}</small>{% endif %}
+                {% if form.date.errors %}<div class="invalid-feedback d-block">{{ form.date.errors|join:", " }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.location.id_for_label }}" class="form-label">{{ form.location.label }}</label>
+            {{ form.location }}
+            {% if form.location.errors %}<div class="invalid-feedback d-block">{{ form.location.errors|join:", " }}</div>{% endif %}
+        </div>
+        
+        <div class="mb-3">
+            <label for="{{ form.short_description.id_for_label }}" class="form-label">{{ form.short_description.label }}</label>
+            {{ form.short_description }}
+            {% if form.short_description.errors %}<div class="invalid-feedback d-block">{{ form.short_description.errors|join:", " }}</div>{% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.long_description.id_for_label }}" class="form-label">{{ form.long_description.label }}</label>
+            {{ form.long_description }}
+            {% if form.long_description.errors %}<div class="invalid-feedback d-block">{{ form.long_description.errors|join:", " }}</div>{% endif %}
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.image.id_for_label }}" class="form-label">{{ form.image.label }}</label>
+                {{ form.image }}
+                {% if form.image.errors %}<div class="invalid-feedback d-block">{{ form.image.errors|join:", " }}</div>{% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.imagem_destaque.id_for_label }}" class="form-label">{{ form.imagem_destaque.label }}</label>
+                {{ form.imagem_destaque }}
+                {% if form.imagem_destaque.errors %}<div class="invalid-feedback d-block">{{ form.imagem_destaque.errors|join:", " }}</div>{% endif %}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.organizer_name.id_for_label }}" class="form-label">{{ form.organizer_name.label }}</label>
+                {{ form.organizer_name }}
+                {% if form.organizer_name.errors %}<div class="invalid-feedback d-block">{{ form.organizer_name.errors|join:", " }}</div>{% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.status.id_for_label }}" class="form-label">{{ form.status.label }}</label>
+                {{ form.status }}
+                {% if form.status.errors %}<div class="invalid-feedback d-block">{{ form.status.errors|join:", " }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.contact_email.id_for_label }}" class="form-label">{{ form.contact_email.label }}</label>
+                {{ form.contact_email }}
+                {% if form.contact_email.errors %}<div class="invalid-feedback d-block">{{ form.contact_email.errors|join:", " }}</div>{% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.contact_phone.id_for_label }}" class="form-label">{{ form.contact_phone.label }}</label>
+                {{ form.contact_phone }}
+                {% if form.contact_phone.errors %}<div class="invalid-feedback d-block">{{ form.contact_phone.errors|join:", " }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.stream_link.id_for_label }}" class="form-label">{{ form.stream_link.label }}</label>
+            {{ form.stream_link }}
+            {% if form.stream_link.errors %}<div class="invalid-feedback d-block">{{ form.stream_link.errors|join:", " }}</div>{% endif %}
+        </div>
+        
+        {% if form.event_request %}
+        <div class="mb-3">
+            <label for="{{ form.event_request.id_for_label }}" class="form-label">{{ form.event_request.label }}</label>
+            {{ form.event_request }}
+            {% if form.event_request.help_text %}<small class="form-text text-muted">{{ form.event_request.help_text }}</small>{% endif %}
+            {% if form.event_request.errors %}<div class="invalid-feedback d-block">{{ form.event_request.errors|join:", " }}</div>{% endif %}
+        </div>
+        {% endif %}
+
+        {# Campo de Palestrantes - COM DEPURAÇÃO E ESTILOS FORÇADOS #}
+        <div class="mb-3">
+            <label class="form-label"><strong>{{ form.speakers.label }} (Modo de Depuração com Estilos Forçados)</strong></label>
+            <div class="form-check-input-group">
+                {% if form.speakers %}
+                    {% for checkbox in form.speakers %}
+                        <div class="speaker-debug-item">
+                            TAG DO CHECKBOX: {{ checkbox.tag }}
+                            <br>
+                            ID PARA LABEL: {{ checkbox.id_for_label }}
+                            <br>
+                            TEXTO DO LABEL (choice_label): <span class="debug-label-text">"{{ checkbox.choice_label }}"</span>
+                            <hr>
+                            {# Tentativa de renderização normal abaixo para comparação #}
+                            <div class="form-check"> {# Este deve ter fundo verde claro e borda verde grossa #}
+                                {{ checkbox.tag }}
+                                <label for="{{ checkbox.id_for_label }}" class="form-check-label">{{ checkbox.choice_label }}</label> {# Este deve ter fundo amarelo e borda vermelha grossa #}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Nenhum palestrante disponível para seleção ou campo 'speakers' não encontrado no formulário.</p>
+                {% endif %}
+            </div>
+            {% if form.speakers.help_text %}<small class="form-text text-muted">{{ form.speakers.help_text }}</small>{% endif %}
+            {% if form.speakers.errors %}<div class="invalid-feedback d-block">{{ form.speakers.errors|join:", " }}</div>{% endif %}
+        </div>
+
+        <hr>
+        <button type="submit" class="btn btn-primary">Salvar Evento</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+{% endblock %}

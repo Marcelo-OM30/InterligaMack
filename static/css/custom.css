@@ -203,3 +203,30 @@ footer p.text-muted {
     text-align: center; url("{% static 'images/sua-imagem-hero.jpg' %}");
     color: white;
 }   padding: 100px 0;
+
+/* Estilos para corrigir visibilidade no formulário de registro e outras áreas */
+
+/* Força a visibilidade dos labels no formulário de registro */
+.form-label {
+  color: #212529 !important; /* Cor de texto padrão do Bootstrap, ou use 'black' ou 'var(--mackenzie-blue)' */
+  font-size: inherit !important; /* Garante que o tamanho da fonte não seja zero */
+  text-indent: 0 !important; /* Remove qualquer indentação que possa esconder o texto */
+  opacity: 1 !important; /* Garante que não esteja transparente */
+}
+
+/* Garante a visibilidade do texto no parágrafo de 'Já tem uma conta?' */
+.card-body p.text-center {
+  color: #212529 !important; /* Cor de texto padrão, ajuste se necessário */
+  font-size: inherit !important;
+  opacity: 1 !important;
+}
+
+/* Garante a visibilidade do texto de ajuda (help_text) */
+.form-text.text-muted {
+  color: #6c757d !important; /* Cor padrão do Bootstrap para .text-muted */
+  font-size: 0.875em !important; /* Tamanho comum para help text, ou use 'inherit' */
+  opacity: 1 !important;
+  display: block !important; /* Garante que não esteja com display: none */
+}
+
+/* Você pode adicionar outros estilos personalizados aqui abaixo */

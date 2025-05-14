@@ -1,45 +1,57 @@
 from django.contrib import admin
-from .models import Event, EventRequest
+from .models import Event, EventRequest, Speaker
+
+@admin.register(Speaker)
+class SpeakerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'lattes_link')
+    search_fields = ('name', 'bio')
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'date', 'location', 'status', 'created_by', 'created_at') # Substituído 'title' por 'name', removido 'start_time' (agora parte de 'date')
-    list_filter = ('status', 'date', 'location', 'created_by')
-    search_fields = ('name', 'location', 'short_description', 'long_description', 'organizer_name')
-    ordering = ('-date',)
-    # raw_id_fields = ('event_request', 'created_by') # Se você tiver muitos usuários/solicitações
+    list_display = ('name', 'date', 'location', 'status', 'created_by', 'event_request') # Adicionado event_request
+    list_filter = ('date', 'status', 'speakers')
+    search_fields = ('name', 'long_description', 'location', 'speakers__name')
+    filter_horizontal = ('speakers',)
     
     fieldsets = (
         (None, {
-            'fields': ('name', 'date', 'location', 'status')
+            'fields': ('name', 'short_description', 'long_description', 'imagem_destaque', 'image')
         }),
-        ('Detalhes do Evento', {
-            'fields': ('short_description', 'long_description', 'image', 'organizer_name', 'contact_email', 'contact_phone')
+        ('Data e Local', {
+            'fields': ('date', 'location') 
         }),
-        ('Origem e Criação', {
-            'fields': ('event_request', 'created_by'),
-            'classes': ('collapse',), # Opcional, para agrupar campos menos usados
+        ('Palestrantes', { 
+            'fields': ('speakers',)
+        }),
+        ('Detalhes Adicionais e Controle', {
+            'fields': ('organizer_name', 'contact_email', 'contact_phone', 'status', 
+                       'stream_link', # Adicionado stream_link
+                       'created_by', 'event_request')
         }),
     )
-    readonly_fields = ('created_at', 'updated_at') # Campos que não devem ser editados diretamente
-
-    def get_queryset(self, request):
-        # Opcional: otimizar queryset
-        return super().get_queryset(request).select_related('created_by', 'event_request')
+    readonly_fields = ('created_at', 'updated_at', 'event_request')
 
 @admin.register(EventRequest)
 class EventRequestAdmin(admin.ModelAdmin):
-    list_display = ('event_name_proposal', 'requester', 'request_date', 'status', 'auditorium_requested')
-    list_filter = ('status', 'request_date', 'requester', 'auditorium_requested')
-    search_fields = ('event_name_proposal', 'requester__username', 'requester__email', 'auditorium_requested', 'internal_notes')
-    ordering = ('-request_date',)
-    # raw_id_fields = ('requester',)
+    list_display = ('event_name_proposal', 'requester', 'request_date', 'status', 'created_at') 
+    list_filter = ('status', 'request_date')
+    search_fields = ('event_name_proposal', 'requester__username', 'internal_notes') 
+    readonly_fields = ('created_at', 'updated_at', 'requester', 'request_date')
+    actions = ['approve_requests', 'reject_requests']
 
     fieldsets = (
-        ('Informações da Solicitação', {
-            'fields': ('event_name_proposal', 'requester', 'status', 'request_date')
+        ('Detalhes da Solicitação', {
+            'fields': (
+                'event_name_proposal', 
+                'requester', 
+                'request_date', 
+                'auditorium_requested',
+                'stream_requested', # Adicionado
+                'suggested_stream_link', # Adicionado
+            )
         }),
-        ('Detalhes da Necessidade', {
+        ('Necessidades Específicas (Detalhes)', {
+            'classes': ('collapse',), 
             'fields': (
                 'needs_sound_system', 'sound_system_details',
                 'needs_photography', 'photography_details',
@@ -47,59 +59,58 @@ class EventRequestAdmin(admin.ModelAdmin):
                 'needs_recording_transmission', 'recording_transmission_details',
                 'needs_journalistic_coverage', 'journalistic_coverage_details',
                 'needs_maintenance', 'maintenance_details',
-                'auditorium_requested',
             )
         }),
-        ('Administrativo', {
-            'fields': ('internal_notes', 'created_at', 'updated_at'),
-            'classes': ('collapse',),
+        ('Status e Observações Internas', {
+            'fields': ('status', 'internal_notes') 
         }),
     )
-    readonly_fields = ('request_date', 'created_at', 'updated_at')
 
     def approve_requests(self, request, queryset):
-        created_events_count = 0
         for event_request_obj in queryset:
-            if event_request_obj.status == 'pending': # Processar apenas as pendentes
-                # Lógica para criar um Event a partir do EventRequest
-                # Adapte os campos conforme necessário
-                try:
-                    event, created = Event.objects.update_or_create(
-                        event_request=event_request_obj, # Para evitar duplicatas se a ação for rodada de novo
-                        defaults={
-                            'name': event_request_obj.event_name_proposal,
-                            # 'date': event_request_obj.requested_date_time, # Se EventRequest tiver este campo
-                            # 'location': event_request_obj.requested_location, # Se EventRequest tiver este campo
-                            # 'short_description': event_request_obj.some_short_description_field,
-                            # 'long_description': event_request_obj.some_long_description_field,
-                            # 'organizer_name': event_request_obj.proposing_department, # Exemplo
-                            # 'contact_email': event_request_obj.contact_email, # Exemplo
-                            # 'image': event_request_obj.image_proposal, # Se EventRequest tiver imagem
-                            'status': 'published', # Ou 'draft', dependendo do seu fluxo
-                            'created_by': request.user, # Ou um usuário específico do cerimonial
-                        }
-                    )
-                    if created:
-                        created_events_count += 1
-                    
-                    event_request_obj.status = 'approved'
-                    event_request_obj.save()
+            if not hasattr(event_request_obj, 'approved_event') or not event_request_obj.approved_event:
+                event_data = {
+                    'name': event_request_obj.event_name_proposal,
+                    'created_by': event_request_obj.requester,
+                    'event_request': event_request_obj, 
+                    'status': 'draft', 
+                }
+                
+                if event_request_obj.auditorium_requested:
+                    event_data['location'] = event_request_obj.auditorium_requested
+                
+                # Adicionar link da transmissão se solicitado e sugerido
+                if event_request_obj.stream_requested and event_request_obj.suggested_stream_link:
+                    event_data['stream_link'] = event_request_obj.suggested_stream_link
+                elif event_request_obj.stream_requested:
+                    # Se solicitado mas sem link, pode-se adicionar uma nota ou deixar em branco para preenchimento manual
+                    pass
 
-                except Exception as e:
-                    # Lidar com possíveis erros na criação do Event
-                    self.message_user(request, f"Erro ao processar solicitação ID {event_request_obj.id}: {e}", level='error')
+                description_parts = []
+                if event_request_obj.sound_system_details:
+                    description_parts.append(f"Sonorização: {event_request_obj.sound_system_details}")
+                if event_request_obj.photography_details:
+                    description_parts.append(f"Fotografia: {event_request_obj.photography_details}")
+                if event_request_obj.support_cleaning_details:
+                    description_parts.append(f"Apoio/Limpeza: {event_request_obj.support_cleaning_details}")
+                if event_request_obj.recording_transmission_details:
+                    description_parts.append(f"Gravação/Transmissão: {event_request_obj.recording_transmission_details}")
+                if event_request_obj.journalistic_coverage_details:
+                    description_parts.append(f"Cobertura Jornalística: {event_request_obj.journalistic_coverage_details}")
+                if event_request_obj.maintenance_details:
+                    description_parts.append(f"Manutenção: {event_request_obj.maintenance_details}")
+                if event_request_obj.internal_notes:
+                    description_parts.append(f"\nObservações Internas da Solicitação:\n{event_request_obj.internal_notes}")
+                
+                if description_parts:
+                    event_data['long_description'] = "\n\n".join(description_parts)
+
+                Event.objects.create(**event_data)
             
-            elif event_request_obj.status == 'approved':
-                 self.message_user(request, f"Solicitação ID {event_request_obj.id} já está aprovada.", level='warning')
-            else:
-                self.message_user(request, f"Não é possível aprovar solicitação ID {event_request_obj.id} com status '{event_request_obj.get_status_display()}'.", level='warning')
+            event_request_obj.status = 'approved'
+            event_request_obj.save()
+    approve_requests.short_description = "Aprovar solicitações selecionadas e criar eventos"
 
-
-        if created_events_count > 0:
-            self.message_user(request, f'{created_events_count} eventos foram criados e as solicitações correspondentes aprovadas.')
-        else:
-            self.message_user(request, 'Nenhum novo evento foi criado. Verifique o status das solicitações ou mensagens de erro.', level='info')
-
-    approve_requests.short_description = "Aprovar e Criar Eventos para solicitações selecionadas"
-
-    actions = [approve_requests]
+    def reject_requests(self, request, queryset):
+        queryset.update(status='rejected')
+    reject_requests.short_description = "Rejeitar solicitações selecionadas"
