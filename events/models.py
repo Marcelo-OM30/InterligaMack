@@ -90,6 +90,12 @@ class Event(models.Model):
     contact_email = models.EmailField(blank=True, null=True, verbose_name='E-mail de Contato')
     contact_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='Telefone de Contato')
 
+    program = models.TextField(blank=True, null=True, verbose_name='Programação do Evento')
+    start_time = models.TimeField(blank=True, null=True, verbose_name='Horário de Início')
+    end_time = models.TimeField(blank=True, null=True, verbose_name='Horário de Término')
+    speaker_bios = models.TextField(blank=True, null=True, verbose_name='Biografia dos Palestrantes (texto)') # Se for usar o ManyToMany com Speaker, este pode ser redundante ou para um resumo.
+    invitation_details = models.TextField(blank=True, null=True, verbose_name='Detalhes do Convite')
+    devotional_text = models.TextField(blank=True, null=True, verbose_name='Texto Devocional')
     event_request = models.OneToOneField(
         EventRequest, 
         on_delete=models.SET_NULL, 

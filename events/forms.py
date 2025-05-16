@@ -76,6 +76,31 @@ class CombinedEventRequestForm(forms.Form): # Este é um forms.Form, não ModelF
     # start_time e end_time não existem mais separadamente no modelo Event, 'date' é DateTimeField
     location = forms.CharField(label='Local', max_length=300)
     
+    start_time = forms.TimeField(
+        label='Horário de Início',
+        widget=forms.TimeInput(attrs={'type': 'time'}),
+        required=False # Defina como True se for obrigatório
+    )
+    end_time = forms.TimeField(
+        label='Horário de Término',
+        widget=forms.TimeInput(attrs={'type': 'time'}),
+        required=False # Defina como True se for obrigatório
+    )
+    speaker_bios = forms.CharField(
+        label='Biografia dos Palestrantes (se houver)',
+        widget=forms.Textarea,
+        required=False
+    )
+    invitation_details = forms.CharField(
+        label='Detalhes do Convite (texto, público-alvo, etc.)',
+        widget=forms.Textarea,
+        required=False
+    )
+    devotional_text = forms.CharField(
+        label='Texto Devocional (se aplicável)',
+        widget=forms.Textarea,
+        required=False
+    )
     # Campos que podem ir para short_description, organizer_name, etc. em Event
     short_description_combined = forms.CharField(label='Descrição Curta do Evento', widget=forms.Textarea(attrs={'rows': 3}), required=False)
     organizer_name_combined = forms.CharField(label='Nome do Organizador/Departamento', max_length=150, required=False)

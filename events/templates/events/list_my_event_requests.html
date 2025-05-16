@@ -18,13 +18,21 @@
         <tbody>
             {% for req in event_requests %}
             <tr>
-                <td>{{ req.event.title }}</td>
-                <td>{{ req.event.date|date:"d/m/Y" }}</td>
-                <td>{{ req.event.location }}</td>
+                {% if req.approved_event %}
+                    <td>{{ req.approved_event.name }}</td>
+                    <td>{{ req.approved_event.date|date:"d/m/Y H:i" }}</td>
+                    <td>{{ req.approved_event.location }}</td>
+                {% else %}
+                    {# Se não houver evento aprovado vinculado, mostre o nome proposto da solicitação #}
+                    {# e indique que os detalhes do evento estão pendentes ou não disponíveis #}
+                    <td>{{ req.event_name_proposal|default:"Evento não especificado" }} (Detalhes do evento pendentes)</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                {% endif %}
                 <td>{{ req.request_date|date:"d/m/Y H:i" }}</td>
                 <td><span class="badge bg-{% if req.status == 'pending' %}warning text-dark{% elif req.status == 'approved' %}success{% elif req.status == 'rejected' %}danger{% elif req.status == 'in_progress' %}info text-dark{% elif req.status == 'completed' %}primary{% elif req.status == 'cancelled' %}secondary{% endif %}">{{ req.get_status_display }}</span></td>
                 <td>
-                    <a href="{% url 'event_request_detail' request_id=req.id %}" class="btn btn-sm btn-info">Detalhes</a>
+                    <a href="{% url 'events:event_request_detail' request_id=req.id %}" class="btn btn-sm btn-info">Detalhes</a>
                     <!-- Adicionar links para editar/cancelar se aplicável e permitido -->
                 </td>
             </tr>

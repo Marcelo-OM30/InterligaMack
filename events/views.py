@@ -17,8 +17,8 @@ def create_event_request(request):
         form = CombinedEventRequestForm(request.POST)
         if form.is_valid():
             # Criar o objeto Event
-            event = Event.objects.create(
-                title=form.cleaned_data['title'],
+             event_obj = Event.objects.create(
+                name=form.cleaned_data['title'],
                 program=form.cleaned_data['program'],
                 date=form.cleaned_data['date'],
                 start_time=form.cleaned_data['start_time'],
@@ -30,9 +30,10 @@ def create_event_request(request):
             )
 
             # Criar o objeto EventRequest
-            EventRequest.objects.create(
+             event_request_obj = EventRequest.objects.create(
                 requester=request.user,
-                event=event,
+                event_name_proposal=form.cleaned_data['title'],
+                # event=event,
                 needs_sound_system=form.cleaned_data['needs_sound_system'],
                 sound_system_details=form.cleaned_data['sound_system_details'],
                 needs_photography=form.cleaned_data['needs_photography'],
@@ -49,9 +50,11 @@ def create_event_request(request):
                 internal_notes=form.cleaned_data['internal_notes']
                 # status é 'pending' por padrão
             )
-            messages.success(request, 'Sua solicitação de evento foi enviada com sucesso!')
+             event_obj.event_request = event_request_obj # 'event_request' é o campo no modelo Event
+             event_obj.save() # Salvar o objeto Event com a referência atualizada
+             messages.success(request, 'Sua solicitação de evento foi enviada com sucesso!')
             # Redirecionar para uma página de sucesso ou lista de solicitações
-            return redirect('list_my_event_requests') # Precisaremos criar esta URL e view
+             return redirect('events:list_my_event_requests') # Precisaremos criar esta URL e view
         else:
             messages.error(request, 'Por favor, corrija os erros abaixo.')
     else:
@@ -72,7 +75,14 @@ def list_my_event_requests(request):
 def event_request_detail(request, request_id):
     event_request = get_object_or_404(EventRequest, id=request_id, requester=request.user)
     # Garante que o usuário só pode ver suas próprias solicitações
-    return render(request, 'events/event_request_detail.html', {'event_request': event_request, 'page_title': f'Detalhes da Solicitação: {event_request.event.title}'})
+    page_title = 'Detalhes da Solicitação'
+    if event_request.approved_event:
+        page_title = f'Detalhes da Solicitação: {event_request.approved_event.name}'
+    elif event_request.event_name_proposal: # Fallback para o nome proposto se não houver evento aprovado
+        page_title = f'Detalhes da Solicitação: {event_request.event_name_proposal} (Pendente)'
+
+    return render(request, 'events/event_request_detail.html', {'event_request': event_request, 'page_title': page_title})
+    # return render(request, 'events/event_request_detail.html', {'event_request': event_request, 'page_title': f'Detalhes da Solicitação: {event_request.event.title}'})
 
 def public_event_list(request):
     """
